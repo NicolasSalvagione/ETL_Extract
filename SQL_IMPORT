@@ -1,0 +1,48 @@
+##sqldb access account
+
+import pymssql
+import pandas as pd
+import numpy as np
+
+server = 'Where'
+user = 'Who'
+password = 'what'
+database = 'Why'
+
+conn = pymssql.connect(server, user, password, database)
+cursor = conn.cursor()
+
+##SQLdb with windows Authentication
+
+conn = pymssql.connect(
+    host=r'server\instance',
+    user=r'domain\username',
+    password=1234,
+    database='db'
+)
+
+import pyodbc
+# Parameters
+server = 'server_name'
+db = 'db_name'
+
+# Create the connection
+conn = pyodbc.connect('DRIVER={SQL Server};SERVER=' + server + ';DATABASE=' + db + ';Trusted_Connection=yes')
+conn = pyodbc.connect('DRIVER={SQL Server};SERVER=' + server + ';DATABASE=' + db + ';UID='+user+';PWD='+password)
+
+
+## Loading Data into DataFram
+
+cursor.execute("SELECT  * FROM  #TABLE")
+
+df = pd.DataFrame(cursor.fetchall())
+
+##Loading with a read file
+
+fd = open('SQLQuery2.txt', 'r')
+sql = fd.read()
+fd.close()
+
+df = pandas.read_sql(sql, conn)
+
+
